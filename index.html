@@ -271,6 +271,7 @@ question.push(new que("Who maked us?","Isshawr","Bhagban","Allah","Sheikh Hasina
 
 setQue()
 
+min = Math.floor(((question.length * 30) / 60)-1);
 var allOption = document.querySelectorAll(".option");
 
 function check(el){
@@ -404,7 +405,7 @@ min--;
 }
 
 sec--;
-}, 10)
+}, 1000)
 }
 
 window.onload = init;
