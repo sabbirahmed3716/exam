@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Web Exam Application</title>
+<style type="text/css">
+	* {
+	margin:0;
+	padding:0;
+	box-sizing:border-box;
+	font-family: times new roman;
+	}
+	html {
+	scroll-behavior:smooth;
+	}
+	body {
+	position:fixed;
+	top:0;
+	left:0;
+	height: 100vh;
+	width:100vw;
+	background: white;
+	}
+	/*Header Section */
+	header, footer {
+	background: teal;
+	color:white;
+	width: 100vw;
+	padding:0px 20px;
+	display: flex;
+	align-items: center;
+	justify-content:space-between;
+	overflow:hidden;
+	}
+	.title {
+	border:2px solid gold;
+	padding:2vh;
+	}
+	.title h2{
+	color: gold;
+	font-weight: bold;
+	}
+	.timer {
+	line-height: 100%;
+	}
+	.timer div{
+	float:left;
+	font-size: 22px;
+	}
+	.timer:after {
+	content:'';
+	clear:both;
+	display: block;
+	}
+	.hour:after, .minute:after {
+	content:':';
+	color: gold;
+	margin:0 3px;
+	font-weight:bold;
+	font-size:30px;
+	-webkit-animation: opacity 1s infinite;
+	display:inline;
+	}
+	.second:after {
+	content:'';
+	font-size:30px;
+	}
+	@-webkit-keyframes opacity {
+	59%{opacity:1;} 60%{opacity:0;} 99%{opacity: 0;} 100%{opacity:1;}
+	}
+	main {
+	height: 75vh;
+	width: 100%;
+	overflow:hidden;
+	overflow-y: auto;
+	}
+	
+	header {
+	
+	height: 15vh;
+	}
+	footer {
+	height:10vh;
+	}
+	.submit {
+	}
+	.submit button {
+	height: 15vh;
+	max-width: 100px;
+	background: gold;
+	color: navy;
+	border:none;
+	outline: none;
+	padding: 20px;
+	font-size: 18px;
+	-webkit-transform: translateX(20px);
+	}
+	.container {
+	width:80vw;
+	margin:0 auto;
+	}
+	.card {
+	width:100%;
+	background: rgb(160,255,180);
+	border-radius: 7px;
+	margin: 50px auto;
+	padding:20px;
+	}
+	.question {
+	font-size:18px;
+	}
+	.option {
+	font-size:14px;
+	color:grey;
+	padding:10px;
+	margin:5px auto;
+	}
+	label {
+	margin-left:3px;
+	}
+	.selection {
+	background: #0277ff;
+	color: white;
+	border-radius:5px;
+	}
+	.right {
+	background: #3ddd2a;
+	color: white;
+	border-radius:5px;
+	}
+	.wrong {
+	background: #dd0202;
+	color: white;
+	border-radius:5px;
+	}
+	
+	.card {
+	counter-reset: counter;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.2),
+	0 8px 15px rgba(0,0,0,0.18),
+	0 -2px 4px rgba(0,0,0,0.2),
+	0 -8px 15px rgba(0,0,0,0.18);
+	}
+	.option {
+	counter-increment:counter;
+	}
+	.option:before{
+	content:counter(counter)') ';
+	}
+	.result {
+	background: rgba(0,0,0,0.3);
+	text-align:center;
+	width:80%;
+	margin:20px auto;
+	color:white;
+	overflow:hidden;
+	box-shadow:0 4px 8px 0 rgba(0,0,0,0.3),
+	0 6px 20px 0 rgba(0,0,0,0.25);
+	display: none;
+	}
+	.result h3{
+	width:100%;
+	padding:10px;
+	background: grey;
+	font-size:20px;
+	color:white;
+	}
+	.start-btn {
+	padding: 10px 30px;
+	background-color:#008dff;
+	color: white;
+	border:none;
+	font-size:18px;
+	outline: none;
+	border-radius: 7px;
+	margin:10px 0;
+	box-shadow:0 2px 5px 0px grey;
+	}
+	.start-btn:hover {
+	background: #0065b3;
+	}
+	.point {
+	width: 100%;
+	color: #333;
+	background: rgb(60,220,140);
+	border-radius:5px;
+	overflow:hidden;
+	box-shadow:0 2px 5px 0 rgba(0,0,0,0.2),
+	0 10px 16px 0 rgba(0,0,0,0.19);
+	}
+	.point p{
+	text-align: center;
+	padding:7px;
+	font-size:17px;
+	}
+	.start {
+	position:fixed;
+	top:0;
+	height:100vh;
+	width:100vw;
+	background: #222;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	z-index:10;
+	display:none;
+	}
+	.start-btn:nth-child(1) {
+	box-shadow: 0 1px 5px white;
+	}
+</style>
+</head>
+<body>
+<header>
+<div class="title" >
+<h2>Web Exam</h2>
+</div>
+<div class="timer" >
+<div class="hour" >00</div>
+<div class="minute" id="minute" >09</div>
+<div class="second" id="second" >59</div>
+</div>
+</header>
+<main>
+
+<div class="start" >
+	<button onclick="init()" type="button" class="start-btn" >Start</button>
+</div>
+
+<div class="result" id="result" >
+<div class="point">
+	<h3>Result</h3>
+	<p><span>Total: </span><span id="total">30</span></p>
+	<p><span>Marked: </span><span id="marked">18</span></p>
+	<p><span>Not Marked: </span><span id="not-marked">18</span></p>
+	<p><span>Right: </span><span id="right">10</span></p>
+	<p><span>Wrong: </span><span id="wrong">8</span></p>
+	<p><span>Score: </span><span id="score">8</span></p>
+	<button onclick="init()" type="button" class="start-btn" >Start Again</button>
+</div></div>
+
+
+<div class="container" id="que-box" >
+</div>
+</div>
+</main>
+<footer>
+<div class="question-counter" >
+<span class="marked" id="marked" >
+0
+</span><span> / </span>
+<span class="total" id="total" >30</span>
+</div>
+<div class="submit">
+<button type="button" onclick="submitAnswer()">Submit</button>
+</button>
+</footer>
+<script type="text/javascript">
+var questionBox = document.getElementById("que-box");
+var qId, oId, min=9, sec=59, total=0,wrong=0,right=0;
+var status = "running";
+var timer;
+var question = [new que("Simple title","op1","o2","op3","o4","o1")];
+question.push(new que("Complex title","op1","o2","op3","o4","o4"));
+setQue()
+
+var allOption = document.querySelectorAll(".option");
+
+function check(el){
+//Mark Question starts here
+		if(status=="running"){
+		var id = Number(el.parentElement.id.slice(1,el.parentElement.id.length));
+		var thisOption = document.querySelectorAll("#q"+id+" .option")
+		question[id].selected = el.id;
+		for(var j=0; j<thisOption.length;j++){
+			thisOption[j].classList.remove("selection")
+		}
+	
+	el.classList.add("selection")
+	qId = el.parentElement.id.slice(1,el.parentElement.id.length);
+	oId = el.id;
+	question[qId].selected = el;
+	}
+	if(oId == question[qId].ans){
+	right++;
+	} else {
+	wrong++;
+	}
+//Mark Qiestion ends here
+	
+
+document.querySelectorAll("#marked")[1].innerHTML=right+wrong;
+document.querySelectorAll("#marked")[0].innerHTML=right+wrong;
+	
+}
+
+
+function submitAnswer(){
+if (status=="end"){} else {
+	clearInterval(timer)
+	for (var i=0; i<question.length; i++){
+	var q = "#q"+i;
+	var answer = question[i].ans;
+	
+	if(question[i].selected == undefined) {
+	document.querySelector(q+" #"+answer).classList.add("right")
+	} else {
+	var sel = question[i].selected;
+	if (sel.id == answer){
+	sel.class = "option";
+	sel.classList.add("right")
+	} else {
+	sel.classList.add("wrong")
+	document.querySelector(q+" #"+answer).classList.add("right")
+	}
+	}
+	}
+}
+
+document.getElementById("right").innerHTML = right;
+document.getElementById("marked").innerHTML = right+wrong;
+document.getElementById("not-marked").innerHTML = total-(right+wrong);
+document.getElementById("wrong").innerHTML = wrong;
+document.getElementById("score").innerHTML = right-(wrong*0.25);
+document.getElementById("result").style.display = "block";
+window.scroll(0,0);
+status = "end";
+
+}
+
+
+
+function que(title, o1, o2, o3, o4, rAns, selected){
+	this.title = title;
+	this.o1 = o1;
+	this.o2 = o2;
+	this.o3 = o3;
+	this.o4 = o4;
+	this.ans = rAns;
+	this.selected = selected;
+}
+
+function setQue(){
+questionBox.innerHTML="";
+for(var i=0; i<question.length; i++){
+	questionBox.innerHTML += '<div class="card" id="q'+i+'">'+
+	'<div class="question"><pre>'+question[i].title+
+	'</pre></div><div class="option" id="o1" onclick="check(this)">'+
+	question[i].o1+
+	'</div><div class="option" id="o2" onclick="check(this)">'+
+	question[i].o2+
+	'</div><div class="option" id="o3" onclick="check(this)">'+
+	question[i].o3+
+	'</div><div class="option" id="o4" onclick="check(this)">'+
+	question[i].o4+
+	'</div></div>';
+}
+allOption = document.querySelectorAll(".option");
+}
+
+function init(){
+min=9;
+sec=59;
+wrong=0;
+right=0;
+status = "running";
+setQue()
+document.getElementById("result").style.display = "none";
+for(var i=0;i<question.length;i++){
+question[i].selected = undefined;
+}
+
+document.querySelectorAll("#marked")[1].innerHTML = 0;
+
+// timer preferences
+timer = setInterval(function(){
+if(min==0 && sec==0){
+clearInterval(timer)
+submitAnswer()
+}
+
+if(sec<10){
+document.getElementById("second").innerHTML = "0"+sec;
+} else {
+document.getElementById("second").innerHTML = sec;
+}
+
+if(min<10){
+document.getElementById("minute").innerHTML = "0"+min;
+} else {
+document.getElementById("minute").innerHTML = min;
+}
+
+if(sec<=0){
+sec=59;
+min--;
+}
+
+sec--;
+}, 10)
+}
+
+window.onload = init;
+total=question.length;
+
+document.querySelectorAll("#total")[1].innerHTML=total;
+document.querySelectorAll("#total")[0].innerHTML=total;
+</script>
+</body>
+</html>
