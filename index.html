@@ -367,7 +367,7 @@ allOption = document.querySelectorAll(".option");
 }
 
 function init(){
-min=9;
+min = Math.floor(((question.length * 30) / 60)-1);
 sec=59;
 wrong=0;
 right=0;
