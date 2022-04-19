@@ -102,7 +102,7 @@ position:fixed;
 	}
 	.container {
 	width:80vw;
-	margin:0 auto;
+	margin:0 auto 50px auto;
 	}
 	.card {
 	width:100%;
@@ -265,8 +265,10 @@ var questionBox = document.getElementById("que-box");
 var qId, oId, min=9, sec=59, total=0,wrong=0,right=0;
 var status = "running";
 var timer;
-var question = [new que("Simple title","op1","o2","op3","o4","o1")];
-question.push(new que("Complex title","op1","o2","op3","o4","o4"));
+var question = [];
+question.push(new que("What is our religion?","Hindu","Muslim","Christians","Buddhist","o2"));
+question.push(new que("Who maked us?","Isshawr","Bhagban","Allah","Sheikh Hasina🤩","o3"));
+
 setQue()
 
 var allOption = document.querySelectorAll(".option");
